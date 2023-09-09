@@ -9,7 +9,7 @@ class ProductColor extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
+        'name_color',
         'image_url',
     ];
     public $timestamps = false;

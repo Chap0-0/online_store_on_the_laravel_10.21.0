@@ -9,7 +9,7 @@ class ProductMemory extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
+        'name_memory',
     ];
     public $timestamps = false;
 

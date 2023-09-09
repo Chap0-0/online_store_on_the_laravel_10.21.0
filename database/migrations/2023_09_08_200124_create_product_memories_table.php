@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('product_memories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name_memory');
             $table->timestamps();
             $table->softDeletes();
         });

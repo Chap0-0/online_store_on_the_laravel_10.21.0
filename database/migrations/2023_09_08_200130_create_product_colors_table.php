@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('product_colors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name_color');
             $table->string('image_url')->nullable();
             $table->timestamps();
             $table->softDeletes();

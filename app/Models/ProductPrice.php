@@ -24,14 +24,14 @@ class ProductPrice extends Model
     }
     public function productColor()
     {
-        return $this->belongsTo(ProductColor::class);
+        return $this->hasOne(ProductColor::class);
     }
     public function productMemory()
     {
-        return $this->belongsTo(ProductMemory::class);
+        return $this->hasOne(ProductMemory::class);
     }
     public function productSize()
     {
-        return $this->belongsTo(ProductSize::class);
+        return $this->hasOne(ProductSize::class);
     }
 }

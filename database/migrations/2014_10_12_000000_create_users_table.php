@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('password');
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
-            $table->boolean('admin')->default(0);
+            $table->enum('role', ['Покупатель', 'Администратор'])->default('Покупатель');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

@@ -9,7 +9,7 @@ class ProductSize extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
+        'name_size',
     ];
     public $timestamps = false;
 

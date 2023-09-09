@@ -19,14 +19,15 @@
     <!-- Список товаров и информация о них -->
     @foreach($products as $product)
     <div class="product-card">
-        <img src="{{ $product->image_url }}" alt="{{ $product->image_url }}" class="product-image">
-        <div class="product-details">
-            <h2 class="product-title">{{ $product->name }}</h2>
-            <p class="product-description">{{ $product->description }}</p>
-            <p class="product-price">Цена: {{ $product->price }} руб.</p>
-            <button class="add-to-cart-button">Добавить в корзину</button>
-        </div>
+    <img src="{{ $product->image_url }}" alt="{{ $product->image_url }}" class="product-image">
+    <div class="product-details">
+        <h2 class="product-title">{{ $product->name }}</h2>
+        <p class="product-description">{{ $product->description }}</p>
+        <p class="product-price">Цена: {{ $product->price }} руб.</p>
+        <p class="product-color">Цвет: {{ $product->name_color }}</p>
+        <button class="add-to-cart-button">Добавить в корзину</button>
     </div>
+</div>
     @endforeach
     </main>
     <style>
@@ -77,6 +78,7 @@
         max-width: 400px;
         height:200px;
         margin: 20px;
+        padding:20px;
         background-color: #fff;
         }
 
@@ -110,7 +112,7 @@
         }
 
         .add-to-cart-button {
-        background-color: #007bff;
+        background-color: #B17AFF;
         color: #fff;
         border: none;
         border-radius: 5px;
@@ -121,7 +123,7 @@
         }
 
         .add-to-cart-button:hover {
-        background-color: #0056b3;
+        background-color: #B1C0FF;
         }
         
     </style>

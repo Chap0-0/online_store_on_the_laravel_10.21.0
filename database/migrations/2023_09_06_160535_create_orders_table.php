@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->bigInteger('order_price');
             $table->enum('status', ['В_обработке', 'Отправлен', 'Доставлен'])->default('В_обработке');
             $table->json('products_info');
+            $table->string('address');
             $table->timestamps();
             $table->softDeletes();
         });
