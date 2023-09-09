@@ -7,17 +7,21 @@ use App\Models\Product;
 
 class MainController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $products = Product::all();
-       return view('index', compact('products'));
+        return view('index', compact('products'));
     }
-    public function categories(){
+    public function categories()
+    {
         return view('categories');
     }
-    public function category($category){
+    public function category($category)
+    {
         return view('category', compact('category'));
     }
-    public function product($product = null){
+    public function product($product = null)
+    {
         return view('product', ['product' => $product]);
     }
 }

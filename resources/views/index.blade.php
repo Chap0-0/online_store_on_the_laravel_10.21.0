@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopa</title>
+    <title>OnliShop</title>
 </head>
 <body>
     <!-- Шапка страницы -->
     <header>
         <div class="Panel">
-            <a class="logo">Shopa</a>
-            <a href="/category">Категории</a>
+            <a class="logo">OnliShop</a>
+            <a href="/catalog">Каталог</a>
             <a href="/cart">Корзина</a>
             <a class="profile" href="/profile">Профиль</a>
         </div>
@@ -19,7 +19,7 @@
     <!-- Список товаров и информация о них -->
     @foreach($products as $product)
     <div class="product-card">
-        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="product-image">
+        <img src="{{ $product->image_url }}" alt="{{ $product->image_url }}" class="product-image">
         <div class="product-details">
             <h2 class="product-title">{{ $product->name }}</h2>
             <p class="product-description">{{ $product->description }}</p>
