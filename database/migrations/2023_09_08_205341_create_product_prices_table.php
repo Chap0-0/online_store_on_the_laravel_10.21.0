@@ -14,13 +14,11 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->unsignedBigInteger('color_id')->nullable();
-            $table->foreign('color_id')->references('id')->on('product_colors')->onDelete('cascade');
-            $table->unsignedBigInteger('memory_id')->nullable();
-            $table->foreign('memory_id')->references('id')->on('product_memories')->onDelete('cascade');
-            $table->unsignedBigInteger('size_id')->nullable();
-            $table->foreign('size_id')->references('id')->on('product_sizes')->onDelete('cascade');
             $table->bigInteger('price');
+            $table->string('main_image')->nullable();
+            // Сделать позже стандартное значение статуса 'не продается', чтобы только продаваемый товар выводился на экран ( поможет при создании записи продукта)  
+            $table->enum('status', ['в наличии', 'нет в наличии', 'не продается'])->default('в наличии');
+            $table->json('info')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

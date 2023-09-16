@@ -17,4 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [MainController::class, 'index']);
 Route::get('/categories', [MainController::class, 'categories']);
 Route::get('/{category}', [MainController::class, 'category']);
-Route::get('/{product}', [MainController::class, 'product']);
+Route::get('/product/{product}/{price_id}', [MainController::class, 'product']);
+Route::get('/cart', [MainController::class, 'products_in_cart']);

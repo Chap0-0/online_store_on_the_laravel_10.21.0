@@ -12,26 +12,26 @@ class ProductPrice extends Model
     protected $fillable = [
         'product_id',
         'price',
-        'color_id',
-        'memory_id',
-        'size_id',
+        'main_image',
+        'info',
+        'status',
     ];
     public $timestamps = false;
 
+    public function cart()
+    {
+        return $this->belongsToMany(Cart::class, 'cart_products');
+    }
+    public function parameters()
+    {
+        return $this->hasMany(ProductParameter::class);
+    }
+    public function images()
+    {
+        return $this->hasMany(ProductImages::class);
+    }
     public function product()
     {
         return $this->belongsTo(Product::class);
-    }
-    public function productColor()
-    {
-        return $this->hasOne(ProductColor::class);
-    }
-    public function productMemory()
-    {
-        return $this->hasOne(ProductMemory::class);
-    }
-    public function productSize()
-    {
-        return $this->hasOne(ProductSize::class);
     }
 }

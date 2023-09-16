@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductColor extends Model
+class ProductImages extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name_color',
         'image_url',
+        'product_price_id',
     ];
-    public $timestamps = false;
 
-    public function productPrice()
+    public function prices()
     {
         return $this->belongsTo(ProductPrice::class);
     }

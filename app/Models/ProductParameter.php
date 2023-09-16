@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductSize extends Model
+class ProductParameter extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name_size',
+        'name_parameter',
+        'value_parameter',
+        'product_price_id',
     ];
-    public $timestamps = false;
 
-    public function productPrice()
+    public function prices()
     {
         return $this->belongsTo(ProductPrice::class);
     }
