@@ -21,13 +21,13 @@ class MainController extends Controller
         return view('index', compact('products', 'categories'));
     }
 
-    public function categories()
+    public function login()
     {
-        return view('categories');
+        return view('login');
     }
-    public function category($category)
+    public function register()
     {
-        return view('category', compact('category'));
+        return view('register');
     }
     public function product($id, $price_id)
     {
@@ -38,16 +38,17 @@ class MainController extends Controller
             ->where('product_prices.id', $price_id)
             ->find($id);
         $product_parameters = ProductParameter::where('product_price_id', $price_id)->get();
-        $alter_product_parameters = ProductParameter::join('product_prices', 'product_parameters.product_price_id', '=', 'product_prices.id')
+        $all_alter_product_parameters = ProductParameter::join('product_prices', 'product_parameters.product_price_id', '=', 'product_prices.id')
             ->where('product_prices.product_id', $id)
             ->where('product_parameters.product_price_id', '!=', $price_id)
             ->get();
         ;
-
+        $alter_product_parameters = collect($all_alter_product_parameters)->unique('value_parameter');
         return view('product', compact('product', 'product_parameters', 'alter_product_parameters'));
     }
     public function products_in_cart()
     {
-        // $products_in_cart = 
+        return view('cart');
     }
+
 }

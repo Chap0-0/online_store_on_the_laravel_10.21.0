@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [MainController::class, 'index']);
-Route::get('/categories', [MainController::class, 'categories']);
-Route::get('/{category}', [MainController::class, 'category']);
-Route::get('/product/{product}/{price_id}', [MainController::class, 'product']);
-Route::get('/cart', [MainController::class, 'products_in_cart']);
+Route::get('/', [MainController::class, 'index'])->name('main');
+Route::get('/login', [MainController::class, 'login'])->name('login');
+Route::get('/register', [MainController::class, 'register'])->name('register');
+Route::get('/cart', [MainController::class, 'products_in_cart'])->name('cart');
+Route::get('/orders', [MainController::class, 'orders'])->name('orders');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+Route::get('/product/{product}/{price_id}', [MainController::class, 'product'])->name('product');
+
+require __DIR__ . '/auth.php';
