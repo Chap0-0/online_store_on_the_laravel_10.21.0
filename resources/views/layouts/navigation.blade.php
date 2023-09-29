@@ -1,4 +1,4 @@
-<nav class="bg-white border-b border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="flex items-center shrink-0">
                     <a href="/">
-                        <p class="text-xl text-gray-200 ">OnliShop</p>
+                        <p class="text-xl text-blue-500 ">OnliShop</p>
                     </a>
                 </div>
 
@@ -28,7 +28,7 @@
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 <button
-                                    class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
+                                    class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-blue-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-blue-700 focus:outline-none">
                                     <div>{{ Auth::user()->name }}</div>
                                 </button>
                             </x-slot>
@@ -52,20 +52,19 @@
                         </x-dropdown>
                     @else
                         <a href="{{ route('login') }}"
-                            class="text-gray-500 dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">Авторизация</a>
+                            class="text-blue-500 hover:text-blue-700 focus:outline-none">Авторизация</a>
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}"
-                                class="text-gray-500 dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">Регистрация</a>
+                                class="pl-3 text-blue-500 hover:text-gray-700 focus:outline-none">Регистрация</a>
                         @endif
                     @endauth
-                </div>
             @endif
         </div>
 
         <!-- Hamburger -->
         <div class="flex items-center -mr-2 sm:hidden">
             <button @click="open = ! open"
-                class="inline-flex items-center justify-center p-2 text-gray-400 transition duration-150 ease-in-out rounded-md dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400">
+                class="inline-flex items-center justify-center p-2 text-blue-400 transition duration-150 ease-in-out rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500">
                 <svg class="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                     <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round"
                         stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -74,7 +73,6 @@
                 </svg>
             </button>
         </div>
-
     </div>
     </div>
 
