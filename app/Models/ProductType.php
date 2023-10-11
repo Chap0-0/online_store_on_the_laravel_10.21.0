@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductPrice extends Model
+class ProductType extends Model
 {
     use HasFactory;
 
@@ -13,18 +13,18 @@ class ProductPrice extends Model
         'product_id',
         'price',
         'main_image',
-        'info',
+        'name_type',
         'status',
     ];
     public $timestamps = false;
 
-    public function cart()
+    public function carts()
     {
         return $this->belongsToMany(Cart::class, 'cart_products');
     }
-    public function parameters()
+    public function properties()
     {
-        return $this->hasMany(ProductParameter::class);
+        return $this->belongsToMany(Property::class, "product_property_values");
     }
     public function images()
     {

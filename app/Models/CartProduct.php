@@ -10,7 +10,7 @@ class CartProduct extends Model
     use HasFactory;
     protected $fillable = [
         'cart_id',
-        'product_id',
+        'product_type_id',
         'quantity',
         'price_products',
     ];
@@ -21,8 +21,8 @@ class CartProduct extends Model
         return $this->belongsTo(Cart::class);
     }
 
-    public function products()
+    public function typeProducts()
     {
-        return $this->belongsTo(ProductPrice::class);
+        return $this->belongsTo(ProductType::class);
     }
 }

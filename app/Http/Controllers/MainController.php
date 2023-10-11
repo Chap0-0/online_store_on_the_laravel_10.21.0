@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\ProductParameter;
-use App\Models\ProductPrice;
+use App\Models\Cart;
+use App\Models\CartProduct;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\ProductPropertyValue;
+use App\Models\ProductType;
+use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
-        return view('index', compact('categories'));
+        $products = Product::join('product_types', 'products.id', '=', 'product_types.product_id')
+            ->select('products.*', 'product_types.name_type', 'product_types.price', 'product_types.main_image', 'product_types.id as type_id')
+            ->get();
+        return view('index', compact('products'));
     }
 
     public function login()
@@ -24,24 +28,67 @@ class MainController extends Controller
     {
         return view('register');
     }
-    public function product($id, $price_id)
+    public function product($id)
     {
-        $product = Product::join('product_categories', 'products.id', '=', 'product_categories.product_id')
-            ->join('categories', 'product_categories.category_id', '=', 'categories.id')
-            ->join('product_prices', 'products.id', '=', 'product_prices.product_id')
-            ->select('products.*', 'product_prices.price', 'product_prices.main_image', 'categories.title as category_name')
-            ->where('product_prices.id', $price_id)
-            ->find($id);
-        $product_parameters = ProductParameter::where('product_price_id', $price_id)->get();
-        $all_alter_product_parameters = ProductParameter::join('product_prices', 'product_parameters.product_price_id', '=', 'product_prices.id')
-            ->where('product_prices.product_id', $id)
-            ->where('product_parameters.product_price_id', '!=', $price_id)
-            ->get();;
-        $alter_product_parameters = collect($all_alter_product_parameters)->unique('value_parameter');
-        return view('product', compact('product', 'product_parameters', 'alter_product_parameters'));
+        $product = ProductType::find($id)
+            ->join('products', 'product_types.product_id', '=', 'products.id')
+            ->select('products.id as prod_id', 'products.name')
+            ->first();
+
+        if ($product) {
+            $prod_id = $product->prod_id;
+        };
+        $productType = ProductType::find($id);
+
+        $selectProperties = ProductPropertyValue::where('product_type_id', $id)
+            ->join('properties', 'product_property_values.property_id', '=', 'properties.id')
+            ->select('properties.name_property as property_select_name', 'product_property_values.property_value as property_select_value')
+            ->get();
+
+        $allProperties = ProductType::where('product_id', $prod_id)
+            ->join('product_property_values', 'product_types.id', '=', 'product_property_values.product_type_id')
+            ->join('properties', 'product_property_values.property_id', '=', 'properties.id')
+            ->select('properties.name_property as property_name', 'product_type_id', 'product_property_values.property_value as property_value')
+            ->distinct()
+            ->get();
+
+        return view('product', compact('productType', 'selectProperties', 'allProperties', 'product'));
+    }
+    public function changeProductType($productType)
+    {
+        // Здесь вы можете выполнить необходимые операции для обновления типа продукта
+        // и вернуть новый HTML-код для элемента
+        $productPrice = ProductType::find($productType);
+
+        $newHTML = '<p class="text-2xl font-bold" >Цена: ' . $productPrice->price . ' руб.</p>';
+
+        return $newHTML;
+    }
+    public function addToCart($idProductType)
+    {
+        // Здесь добавьте код для добавления продукта в корзину, используя данные из $productType.
+        $productType = ProductType::find($idProductType);
+        if (!$productType) {
+            return response()->json(['message' => 'Продукт не найден'], 404);
+        }
+        $cart = Cart::where('user_id', Auth::id())->first();
+        CartProduct::create([
+            'cart_id' => $cart->id,
+            'product_type_id' => $productType->id,
+            'price_products' => $productType->price,
+            'quantity' => 1,
+        ]);
+        // Затем верните подтверждение в виде JSON-ответа.
+        return response()->json(['message' => 'Продукт успешно добавлен в корзину']);
     }
     public function products_in_cart()
     {
-        return view('cart');
+        $products = Cart::where('user_id', Auth::id())
+            ->join('cart_products', 'carts.id', '=', 'cart_products.cart_id')
+            ->join('product_types', 'cart_products.product_type_id', '=', 'product_types.id')
+            ->join('products', 'product_types.product_id', '=', 'products.id')
+            ->select('product_types.name_type', 'product_types.id as type_id', 'product_types.main_image', 'cart_products.price_products as price', 'products.name')
+            ->get();
+        return view('cart', compact('products'));
     }
 }

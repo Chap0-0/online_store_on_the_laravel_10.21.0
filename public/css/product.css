@@ -133,3 +133,6 @@ main {
     cursor: pointer;
     margin-top: 10px;
 }
+.prop-sel{
+    color: red;
+}
