@@ -24,12 +24,23 @@
                             <p class="block mb-2 text-lg font-semibold text-gray-900">{{ $product->price }} руб.</p>
                         </div>
                     </a>
-                    <button class="w-48 h-12 font-semibold text-white bg-blue-400 rounded"
-                        onclick="addToCart({{ $product->type_id }})">/</button>
+                    <button class="w-48 h-12 font-semibold text-white bg-red-400 rounded"
+                        onclick="delProduct({{ $product->type_id }})">Удалить из корзины</button>
                 </div>
             @endforeach
         </div>
     </main>
 </body>
+<script>
+    function delProduct(idProductType) {
+        axios.post('/del-product-from-cart/' + idProductType)
+            .then(function(response) {
+                location.reload();
+            })
+            .catch(function(error) {
+                console.error('Ошибка при удалении из корзину', error);
+            });
+    }
+</script>
 
 </html>

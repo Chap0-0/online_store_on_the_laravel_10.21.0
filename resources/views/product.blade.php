@@ -16,8 +16,8 @@
     <main class="max-w-2xl p-4 mx-auto ">
         <div class="flex flex-wrap p-4 bg-white rounded-lg shadow-md">
             <div class="w-full sm:w-1/2">
-                <img src="{{ $productType->main_image }}" alt="{{ $product->name }} {{ $productType->name_type }}"
-                    class="object-contain w-80 h-96">
+                <img id="main_image" src="{{ $productType->main_image }}"
+                    alt="{{ $product->name }} {{ $productType->name_type }}" class="object-contain w-80 h-96">
             </div>
             <div class="w-full sm:w-1/2">
                 <h2 class="text-3xl font-bold">{{ $product->name }} {{ $productType->name_type }}</h2>
@@ -26,13 +26,16 @@
                         <p class="font-bold">{{ $selectProperty->property_select_name }}:</p>
                         @foreach ($allProperties as $property)
                             @if ($property->property_value == $selectProperty->property_select_value)
-                                <p class="text-red-600">{{ $property->property_value }}</p>
+                                <p id="property_select_value" class="text-red-600">{{ $property->property_value }}</p>
                             @else
-                                <button
-                                    onclick="changeType({{ $property->product_type_id }})">{{ $property->property_value }}</button>
+                                <button class="px-4 py-2 border border-gray-600 border-solid change-property"
+                                    data-product-type="{{ $productType->id }}"
+                                    data-property-value="{{ $property->property_value }}"
+                                    data-select-property_id="{{ $selectProperty->property_id }}">{{ $property->property_value }}</button>
                             @endif
                         @endforeach
                     @endforeach
+
                 </div>
             </div>
         </div>
@@ -40,27 +43,29 @@
         <div class="mt-4">
             <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md">
                 <p class="text-2xl font-bold" id="price">Цена: {{ $productType->price }} руб.</p>
-                <button class="px-4 py-2 text-lg text-white bg-blue-500 rounded-lg hover:bg-blue-700">Добавить в
+                <button onclick="addToCart({{ $productType->id }})"
+                    class="px-4 py-2 text-lg text-white bg-blue-500 rounded-lg hover:bg-blue-700">Добавить в
                     корзину</button>
             </div>
         </div>
     </main>
     <script>
-        function changeType(productType) {
-            var url = "{{ route('change.product.type', ':productType') }}";
-            url = url.replace(':productType', productType);
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('change-property')) {
+                const productTypeId = event.target.getAttribute('data-product-type');
+                const propValue = event.target.getAttribute('data-property-value');
+                const selectProp = event.target.getAttribute('data-select-property_id');
 
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", url, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var response = xhr.responseText;
-                    document.getElementById("price").innerHTML = response;
-                }
-            };
-            xhr.send();
-        }
+                fetch(`/change-product-type/${productTypeId}/${selectProp}/${propValue}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const newUrl = '/product/' + data.newProductId;
+                        history.pushState(null, null, newUrl);
+                    });
+            }
+        });
     </script>
+
 
 
 </body>

@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::get('/product/{product}', [MainController::class, 'product'])->name('product');
-Route::get('/change-product-type/{productType}', [MainController::class, 'changeProductType'])->name('change.product.type');
+Route::get('/change-product-type/{productTypeId}/{selectProp}/{propValue}', [MainController::class, 'changeProductType'])->name('change.product.type');
 Route::post('/add-to-cart/{productType}', [MainController::class, 'addToCart'])->name('add-to-cart');
+Route::post('/del-product-from-cart/{productType}', [MainController::class, 'delProductfromCart'])->name('del-product-from-cart');
 require __DIR__ . '/auth.php';

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\CartProduct;
-use Illuminate\Http\Request;
+use App\Models\Property;
 use App\Models\Product;
 use App\Models\ProductPropertyValue;
 use App\Models\ProductType;
@@ -42,31 +42,71 @@ class MainController extends Controller
 
         $selectProperties = ProductPropertyValue::where('product_type_id', $id)
             ->join('properties', 'product_property_values.property_id', '=', 'properties.id')
-            ->select('properties.name_property as property_select_name', 'product_property_values.property_value as property_select_value')
+            ->select('properties.name_property as property_select_name', 'product_property_values.property_value as property_select_value', 'product_property_values.property_id')
             ->get();
 
         $allProperties = ProductType::where('product_id', $prod_id)
             ->join('product_property_values', 'product_types.id', '=', 'product_property_values.product_type_id')
             ->join('properties', 'product_property_values.property_id', '=', 'properties.id')
-            ->select('properties.name_property as property_name', 'product_type_id', 'product_property_values.property_value as property_value')
+            ->select('properties.name_property as property_name', 'product_property_values.property_value as property_value')
             ->distinct()
             ->get();
 
         return view('product', compact('productType', 'selectProperties', 'allProperties', 'product'));
     }
-    public function changeProductType($productType)
+    public function changeProductType($productTypeId, $selectProp, $propValue)
     {
-        // Здесь вы можете выполнить необходимые операции для обновления типа продукта
-        // и вернуть новый HTML-код для элемента
-        $productPrice = ProductType::find($productType);
+        $oldProperties = productPropertyValue::where('product_type_id', $productTypeId)
+            ->get();
 
-        $newHTML = '<p class="text-2xl font-bold" >Цена: ' . $productPrice->price . ' руб.</p>';
+        $newProperties = [];
+        foreach ($oldProperties as $property) {
+            $newProperties[] = [
+                'property_id' => $property->property_id,
+                'property_value' => $property->property_value,
+            ];
+        }
+        $newProduct = null;
+        foreach ($newProperties as $key => $property) {
+            if ($property['property_id'] == $selectProp) {
+                $newProperties[$key]['property_value'] = $propValue;
+                $newProduct = $this->findProductByProperties($newProperties);
 
-        return $newHTML;
+                if ($newProduct) {
+                    break;
+                }
+            }
+        }
+
+        if ($newProduct) {
+            return response()->json(['newProductId' => $newProduct->id]);
+        }
+    }
+
+    private function findProductByProperties($properties)
+    {
+        $product = ProductType::query();
+        foreach ($properties as $property) {
+            $product->whereHas('properties', function ($query) use ($property) {
+                $query->where('property_id', $property['property_id'])
+                    ->where('property_value', $property['property_value']);
+            });
+        }
+        return $product->first();
+    }
+
+
+    public function delProductFromCart($idProductType)
+    {
+        $productType = CartProduct::where('product_type_id', $idProductType);
+        if (!$productType) {
+            return response()->json(['message' => 'Продукт не найден'], 404);
+        }
+        $productType->delete();
+        return response()->json(['message' => 'Продукт успешно удален из корзины']);
     }
     public function addToCart($idProductType)
     {
-        // Здесь добавьте код для добавления продукта в корзину, используя данные из $productType.
         $productType = ProductType::find($idProductType);
         if (!$productType) {
             return response()->json(['message' => 'Продукт не найден'], 404);
@@ -78,7 +118,6 @@ class MainController extends Controller
             'price_products' => $productType->price,
             'quantity' => 1,
         ]);
-        // Затем верните подтверждение в виде JSON-ответа.
         return response()->json(['message' => 'Продукт успешно добавлен в корзину']);
     }
     public function products_in_cart()

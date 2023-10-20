@@ -36,9 +36,7 @@
     <script>
         function addToCart(idProductType) {
             axios.post('/add-to-cart/' + idProductType)
-                .then(function(response) {
-                    // В этой функции можно обновить информацию о корзине на странице, если это необходимо
-                })
+                .then(function(response) {})
                 .catch(function(error) {
                     console.error('Ошибка при добавлении в корзину', error);
                 });
