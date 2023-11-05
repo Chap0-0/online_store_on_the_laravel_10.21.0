@@ -20,6 +20,10 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             CategoriesSeeder::class,
+            ProductsSeeder::class,
+            PropertiesSeeder::class,
+            ProductTypesSeeder::class,
+            ProductPropertyValuesSeeder::class,
         ]);
     }
 }

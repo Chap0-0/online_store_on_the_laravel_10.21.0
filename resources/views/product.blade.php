@@ -61,6 +61,7 @@
                     .then(data => {
                         const newUrl = '/product/' + data.newProductId;
                         history.pushState(null, null, newUrl);
+                        location.reload();
                     });
             }
         });
